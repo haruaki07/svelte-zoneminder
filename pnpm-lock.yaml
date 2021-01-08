@@ -1,13 +1,20 @@
 dependencies:
+  '@sveltestack/svelte-query': 1.0.1
+  axios: 0.21.1
+  jwt-decode: 3.1.2
   svelte: 3.31.1
+  sveltestrap: 3.11.0_svelte@3.31.1
+  zoneminder: 2.0.0
 devDependencies:
   '@snowpack/plugin-dotenv': 2.0.5
   '@snowpack/plugin-svelte': 3.4.1_svelte@3.31.1
   '@snowpack/web-test-runner-plugin': 0.1.5_514cdb5b3bd43be7bc36981e71b23030
   '@testing-library/svelte': 3.0.3_svelte@3.31.1
   '@web/test-runner': 0.10.2
+  carbon-icons-svelte: 10.21.0
   chai: 4.2.0
   snowpack: 2.18.5
+  tinro: 0.5.2
 lockfileVersion: 5.1
 packages:
   /@babel/code-frame/7.12.11:
@@ -85,6 +92,10 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-Uv6h1sT+0DrblvIrolFtbvM1FgWm+/sy4B3pvLp67Zys+thcukzS5ekn7HsZFGpWP4Q3fYJCljbWQE/XivMRLw==
+  /@popperjs/core/2.6.0:
+    dev: false
+    resolution:
+      integrity: sha512-cPqjjzuFWNK3BSKLm0abspP0sp/IGOli4p5I5fKFAzdS8fvjdOwDCfZqAaIiXd9lPkOWi3SUUfZof3hEb7J/uw==
   /@rollup/plugin-alias/3.1.1_rollup@2.35.1:
     dependencies:
       rollup: 2.35.1
@@ -247,6 +258,12 @@ packages:
       snowpack: ^2.14.3
     resolution:
       integrity: sha512-aeX08rgqR4WYexGtwnY7nZCjbkzIMK9RIvhNVtyg8Xr6VF9HgCOYnTo2rp/y1PWenUba3o2cYAGcl6RuBIXLbw==
+  /@sveltestack/svelte-query/1.0.1:
+    dev: false
+    engines:
+      npm: use yarn instead of npm.
+    resolution:
+      integrity: sha512-wGa1XhP3TBYTMC19SLJFG7oz/XQBY7IjQyxc2LGWciRzG5uNp9l/Yf/aW84wFlMO52RBPby3h89oQCVzcCTdyA==
   /@szmarczak/http-timer/4.0.5:
     dependencies:
       defer-to-connect: 2.0.0
@@ -822,6 +839,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-zflvls11DCy+dQWzTW2dzuilv8Z5X/pjfmZOWba6TNIVDm+2UDaJmXSOXlasHKfNBs8oo3M0aT50fDEWfKZjXg==
+  /axios/0.21.1:
+    dependencies:
+      follow-redirects: 1.13.1
+    dev: false
+    resolution:
+      integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   /balanced-match/1.0.0:
     dev: true
     resolution:
@@ -965,6 +988,10 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-c7wVvbw3f37nuobQNtgsgG9POC9qMbNuMQmTCqZv23b6MIz0fcYpBiOlv9gEN/hdLdnZTDQhg6e9Dq5M1vKvfg==
+  /carbon-icons-svelte/10.21.0:
+    dev: true
+    resolution:
+      integrity: sha512-5NNaRdmbS4N36dUGNj72Ys3VqVjH3fZ69AhYUHx+bH02GFYCwAaE49qjtP77kP7DKMtDV9NmMEti/P/JB83aYQ==
   /chai/4.2.0:
     dependencies:
       assertion-error: 1.1.0
@@ -1626,7 +1653,6 @@ packages:
     resolution:
       integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==
   /follow-redirects/1.13.1:
-    dev: true
     engines:
       node: '>=4.0'
     peerDependencies:
@@ -1827,6 +1853,10 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-4I8r0C5JDhT5VkvI47QktDW75rNlGVsUf/8hzjCC/wkWI/jdTRmBb9aI7erSG82r1bjKY3F6k28WnsVxB1C73A==
+  /http-https/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha1-L5CN1fHbQGjAWM1ubUzjkskTOJs=
   /http-proxy/1.18.1:
     dependencies:
       eventemitter3: 4.0.7
@@ -2114,6 +2144,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-XNZHs3N1IOa3lPKm//npxMhOdaoPw+MvEV0NIgxcER83GTJcG13rehtWmpBCfEt8DrtYwIkMTs8bdXoYs4fvnQ==
+  /jwt-decode/3.1.2:
+    dev: false
+    resolution:
+      integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
   /keygrip/1.1.0:
     dependencies:
       tsscmp: 1.0.6
@@ -2249,10 +2283,18 @@ packages:
     dev: true
     resolution:
       integrity: sha1-soqmKIorn8ZRA1x3EfZathkDMaY=
+  /lodash.isobject/3.0.2:
+    dev: false
+    resolution:
+      integrity: sha1-PI+41bW/S/kK4G4U8qUwpO2TXh0=
   /lodash.sortby/4.7.0:
     dev: true
     resolution:
       integrity: sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
+  /lodash.tonumber/4.0.3:
+    dev: false
+    resolution:
+      integrity: sha1-C5azGzVnJ5Prf1pj7nkfG56QJdk=
   /lodash/4.17.20:
     dev: true
     resolution:
@@ -3322,6 +3364,17 @@ packages:
       node: '>= 8'
     resolution:
       integrity: sha512-Q8xVz5U/IFFNjgvVSjdzKJPAX0MFytFwiJo1HAPfGwM7LkHA+BN2q2kL8vKcJwjku7/509MapLov8C9SjogNRg==
+  /sveltestrap/3.11.0_svelte@3.31.1:
+    dependencies:
+      '@popperjs/core': 2.6.0
+      lodash.isobject: 3.0.2
+      lodash.tonumber: 4.0.3
+      svelte: 3.31.1
+    dev: false
+    peerDependencies:
+      svelte: ^3.4.4
+    resolution:
+      integrity: sha512-MdjbdEGYQXvwlZm+QwNjIGmGRRxGAErn7OzDWHfmbA4o7+Sd50ow7uVGatXE7LZz4DMh/vC/feCFWySs5FBX+A==
   /table-layout/1.0.1:
     dependencies:
       array-back: 4.0.1
@@ -3371,6 +3424,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
+  /tinro/0.5.2:
+    dev: true
+    resolution:
+      integrity: sha512-Rkgx5E3fOlmnlH0KHGJ+0ZMyx7vZuhG/UMpISHtQuP8Ir7OrAOWYVTAr36Vis2cLs5fJwhgga2lZu7zeVe3rFg==
   /to-regex-range/5.0.1:
     dependencies:
       is-number: 7.0.0
@@ -3602,12 +3659,25 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+  /zoneminder/2.0.0:
+    dependencies:
+      http-https: 1.0.0
+    dev: false
+    resolution:
+      integrity: sha512-KgcuuChTN/Qgjk5irnCqQ5JTTyqTWu7a4kJ4bWiK6wepVxMPO6yLDaUnnjXtwYkdGm4eQJKodiwlDxpIw4p0JA==
 specifiers:
   '@snowpack/plugin-dotenv': ^2.0.5
   '@snowpack/plugin-svelte': ^3.4.0
   '@snowpack/web-test-runner-plugin': ^0.1.5
+  '@sveltestack/svelte-query': ^1.0.1
   '@testing-library/svelte': ^3.0.0
   '@web/test-runner': ^0.10.0
+  axios: ^0.21.1
+  carbon-icons-svelte: ^10.21.0
   chai: ^4.2.0
+  jwt-decode: ^3.1.2
   snowpack: ^2.18.4
   svelte: ^3.24.0
+  sveltestrap: ^3.11.0
+  tinro: ^0.5.2
+  zoneminder: ^2.0.0
