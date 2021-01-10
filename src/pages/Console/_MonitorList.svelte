@@ -1,4 +1,5 @@
 <script>
+  import { getContext } from "svelte";
   import { fly } from "svelte/transition";
 
   import {
@@ -9,11 +10,13 @@
     ModalBody,
     ModalHeader,
   } from "sveltestrap";
+  import MonitorListItem from "./_MonitorListItem.svelte";
 
-  let loaded = false;
   let modalOpen = false;
 
   const toggleModal = () => (modalOpen = !modalOpen);
+
+  let monitors = getContext("monitors");
 </script>
 
 <Button color="primary" class="mb-3" on:click={toggleModal}>Add Monitor</Button>
@@ -31,7 +34,10 @@
     </tr>
   </thead>
   <tbody>
-    {#if loaded}
+    {#if $monitors.loaded}
+      {#each $monitors.monitors as monitor}
+        <MonitorListItem {monitor} />
+      {/each}
       <tr>
         <td />
         <td>{0}</td>

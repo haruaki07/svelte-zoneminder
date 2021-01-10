@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import Auth from "./libs/authService";
+import Auth from "./libs/authStorage";
 
 const auth = Auth.getInstance();
 

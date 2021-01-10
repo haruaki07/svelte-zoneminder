@@ -63,7 +63,9 @@ client.interceptors.response.use(
         }
         originalRequest._retry = true;
         const token = new URLSearchParams({ token: auth.refreshToken });
-        const res = await client.post("/host/login.json", token);
+        const res = await client.post("/host/login.json", null, {
+          params: token,
+        });
         if (res.status === 200) {
           // put token to LocalStorage
           accessToken.set(res.data.access_token);
