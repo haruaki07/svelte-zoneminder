@@ -1,7 +1,7 @@
 <script>
   import axios from "axios";
   import jwtDecode from "jwt-decode";
-
+  import { zmUrl } from "../config/env";
   import { accessToken, refreshToken, login, refreshTokenExp } from "../stores";
 
   export let cmp;
@@ -13,10 +13,7 @@
 
   async function auth() {
     const data = new URLSearchParams(values);
-    const res = await axios.post(
-      `${import.meta.env.SNOWPACK_PUBLIC_ZM_URL}api/host/login.json`,
-      data
-    );
+    const res = await axios.post(`${zmUrl}/api/host/login.json`, data);
     accessToken.set(res.data.access_token);
     refreshToken.set(res.data.refresh_token);
     refreshTokenExp.set(jwtDecode(res.data.refresh_token).exp);

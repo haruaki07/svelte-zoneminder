@@ -1,5 +1,6 @@
 import axios from "axios";
 import { accessToken, refreshToken, refreshTokenExp, login } from "../stores";
+import { zmUrl } from "../config/env";
 
 const CancelToken = axios.CancelToken;
 let cancel;
@@ -14,7 +15,7 @@ refreshToken.subscribe((val) => (auth.refreshToken = val));
 refreshTokenExp.subscribe((val) => (auth.refreshTokenExp = val));
 
 const client = axios.create({
-  baseURL: `${import.meta.env.SNOWPACK_PUBLIC_ZM_URL}api`,
+  baseURL: `${zmUrl}/api`,
 });
 client.defaults.params = {};
 

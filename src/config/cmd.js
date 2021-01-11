@@ -1,0 +1,16 @@
+export const CMD_NONE = 0;
+export const CMD_PAUSE = 1;
+export const CMD_PLAY = 2;
+export const CMD_STOP = 3;
+export const CMD_FASTFWD = 4;
+export const CMD_SLOWFWD = 5;
+export const CMD_SLOWREV = 6;
+export const CMD_FASTREV = 7;
+export const CMD_ZOOMIN = 8;
+export const CMD_ZOOMOUT = 9;
+export const CMD_PAN = 10;
+export const CMD_SCALE = 11;
+export const CMD_PREV = 12;
+export const CMD_NEXT = 13;
+export const CMD_SEEK = 14;
+export const CMD_QUERY = 99;

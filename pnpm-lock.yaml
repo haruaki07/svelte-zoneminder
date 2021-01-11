@@ -11,8 +11,9 @@ devDependencies:
   '@snowpack/web-test-runner-plugin': 0.1.5_514cdb5b3bd43be7bc36981e71b23030
   '@testing-library/svelte': 3.0.3_svelte@3.31.1
   '@web/test-runner': 0.10.2
-  carbon-icons-svelte: 10.21.0
   chai: 4.2.0
+  phosphor-svelte: 0.4.0
+  pretty-bytes: 5.5.0
   snowpack: 2.18.5
   tinro: 0.5.2
 lockfileVersion: 5.1
@@ -988,10 +989,6 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-c7wVvbw3f37nuobQNtgsgG9POC9qMbNuMQmTCqZv23b6MIz0fcYpBiOlv9gEN/hdLdnZTDQhg6e9Dq5M1vKvfg==
-  /carbon-icons-svelte/10.21.0:
-    dev: true
-    resolution:
-      integrity: sha512-5NNaRdmbS4N36dUGNj72Ys3VqVjH3fZ69AhYUHx+bH02GFYCwAaE49qjtP77kP7DKMtDV9NmMEti/P/JB83aYQ==
   /chai/4.2.0:
     dependencies:
       assertion-error: 1.1.0
@@ -2723,6 +2720,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-elfrVQpng/kRUzH89GY9XI4AelA=
+  /phosphor-svelte/0.4.0:
+    dev: true
+    resolution:
+      integrity: sha512-/lONGl5WgDLd19h1ayIi1CNm6gN1I3FWcUuGqhTz2ydujNXBCdiJiL4B+s2ZPJOQTzq1LFuRw/McagA0VDE9yQ==
   /picomatch/2.2.2:
     dev: true
     engines:
@@ -2831,6 +2832,12 @@ packages:
       node: ^10 || ^12 || >=14
     resolution:
       integrity: sha512-HM1NDNWLgglJPQQMNwvLxgH2KcrKZklKLi/xXYIOaqQB57p/pDWEJNS83PVICYsn1Dg/9C26TiejNr422/ePaQ==
+  /pretty-bytes/5.5.0:
+    dev: true
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-p+T744ZyjjiaFlMUZZv6YPC5JrkNj8maRmPaQCWFJFplUAzpIUTRaTcS+7wmZtUoFXHtESJb23ISliaWyz3SHA==
   /pretty-format/26.6.2:
     dependencies:
       '@jest/types': 26.6.2
@@ -3673,9 +3680,10 @@ specifiers:
   '@testing-library/svelte': ^3.0.0
   '@web/test-runner': ^0.10.0
   axios: ^0.21.1
-  carbon-icons-svelte: ^10.21.0
   chai: ^4.2.0
   jwt-decode: ^3.1.2
+  phosphor-svelte: ^0.4.0
+  pretty-bytes: ^5.5.0
   snowpack: ^2.18.4
   svelte: ^3.24.0
   sveltestrap: ^3.11.0

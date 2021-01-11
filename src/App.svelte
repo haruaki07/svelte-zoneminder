@@ -12,21 +12,6 @@
     login.set(true);
   }
 
-  // onMount(async () => {
-  //   try {
-  //     const data = new URLSearchParams({token:accessToken});
-  //     const res = await axios.post(
-  //     `${import.meta.env.SNOWPACK_PUBLIC_ZM_URL}api/host/login.json`,
-  //     data
-  //   );
-  //   if (res.status === 401) {
-
-  //   }
-  //   } catch (err) {
-
-  //   }
-  // });
-
   router.subscribe((_) => {
     if (!$refreshTokenExp || new Date($refreshTokenExp * 1000) <= Date.now()) {
       console.log("need login!");

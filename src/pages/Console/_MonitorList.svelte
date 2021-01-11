@@ -1,7 +1,7 @@
 <script>
   import { getContext } from "svelte";
   import { fly } from "svelte/transition";
-
+  import pretty from "pretty-bytes";
   import {
     Button,
     Spinner,
@@ -11,12 +11,23 @@
     ModalHeader,
   } from "sveltestrap";
   import MonitorListItem from "./_MonitorListItem.svelte";
+  import { useQuery } from "@sveltestack/svelte-query";
+  import api from "../../libs/api";
+  import { sumBy } from "../../libs/utils";
 
+  const result = useQuery(
+    "monitors",
+    async () => {
+      const { data } = await api.get("monitors.json");
+      return data;
+    },
+    {
+      refetchInterval: 1000 * 30,
+    }
+  );
   let modalOpen = false;
 
   const toggleModal = () => (modalOpen = !modalOpen);
-
-  let monitors = getContext("monitors");
 </script>
 
 <Button color="primary" class="mb-3" on:click={toggleModal}>Add Monitor</Button>
@@ -34,19 +45,35 @@
     </tr>
   </thead>
   <tbody>
-    {#if $monitors.loaded}
-      {#each $monitors.monitors as monitor}
-        <MonitorListItem {monitor} />
-      {/each}
-      <tr>
-        <td />
-        <td>{0}</td>
-        <td>{0}</td>
-        <td>{0}</td>
-        <td>{0}</td>
-        <td>{0}</td>
-        <td />
-      </tr>
+    {#if !$result.isLoading}
+      {#if $result.data.monitors.length}
+        {#each $result.data.monitors as monitor}
+          <MonitorListItem {monitor} />
+        {/each}
+        <tr>
+          <td />
+          <td>
+            {pretty(sumBy($result.data.monitors, (o) => +o.Monitor_Status['CaptureBandwidth']))}
+          </td>
+          <td>
+            {pretty(sumBy($result.data.monitors, (o) => +o.Monitor['TotalEventDiskSpace']))}
+          </td>
+          <td>
+            {pretty(sumBy($result.data.monitors, (o) => +o.Monitor['DayEventDiskSpace']))}
+          </td>
+          <td>
+            {pretty(sumBy($result.data.monitors, (o) => +o.Monitor['ArchivedEventDiskSpace']))}
+          </td>
+          <td>
+            {sumBy($result.data.monitors, (o) => +o.Monitor['ZoneCount'])}
+          </td>
+          <td />
+        </tr>
+      {:else}
+        <tr class="text-center">
+          <td colspan="7">Empty</td>
+        </tr>
+      {/if}
     {:else}
       <tr>
         <td colspan="7" class="text-center py-3">

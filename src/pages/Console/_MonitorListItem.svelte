@@ -1,8 +1,9 @@
 <script>
   import { Button, Tooltip } from "sveltestrap";
-  import CircleFilled20 from "carbon-icons-svelte/lib/CircleFilled20";
-  import Edit16 from "carbon-icons-svelte/lib/Edit16";
-  import ViewFilled16 from "carbon-icons-svelte/lib/ViewFilled16";
+  import Circle from "phosphor-svelte/lib/Circle";
+  import PencilLine from "phosphor-svelte/lib/PencilLine";
+  import Eye from "phosphor-svelte/lib/Eye";
+  import pretty from "pretty-bytes";
 
   export let monitor;
 </script>
@@ -12,7 +13,7 @@
     <div class="d-inline-block">
       <span
         class={!+monitor.Monitor_Status.CaptureFPS ? 'text-danger' : 'text-primary'}>
-        <CircleFilled20 />
+        <Circle weight="fill" />
         {monitor.Monitor.Name}
       </span>
       <br />
@@ -25,11 +26,11 @@
     {+monitor.Monitor_Status.CaptureFPS}
     fps
     <br />
-    {0}/s
+    {pretty(+monitor.Monitor_Status.CaptureBandwidth)}/s
   </td>
-  <td>{0}</td>
-  <td>{0}</td>
-  <td>{0}</td>
+  <td>{pretty(+monitor.Monitor.TotalEventDiskSpace)}</td>
+  <td>{pretty(+monitor.Monitor.DayEventDiskSpace)}</td>
+  <td>{pretty(+monitor.Monitor.ArchivedEventDiskSpace)}</td>
   <td>{monitor.Monitor.ZoneCount}</td>
   <td>
     <Button
@@ -37,7 +38,7 @@
       id="btnEdit"
       size="sm"
       color="primary">
-      <Edit16 />
+      <PencilLine weight="fill" />
       <Tooltip target="btnEdit">Edit</Tooltip>
     </Button>
     <Button
@@ -45,7 +46,7 @@
       id="btnWatch"
       size="sm"
       color="info">
-      <ViewFilled16 />
+      <Eye weight="fill" />
       <Tooltip target="btnWatch">Watch</Tooltip>
     </Button>
   </td>
