@@ -3,6 +3,7 @@
   import Navbar from "./components/Navbar.svelte";
   import Content from "./components/Content.svelte";
   import About from "./pages/About.svelte";
+  import Watch from "./pages/Watch";
   import Console from "./pages/Console";
   import { refreshToken, login, refreshTokenExp, accessToken } from "./stores";
   import { onMount } from "svelte";
@@ -29,6 +30,10 @@
   <Navbar />
   <Route path="/">
     <Content cmp={Console} />
+  </Route>
+  <Route path="/watch" redirect="/" />
+  <Route path="/watch/:id">
+    <Watch />
   </Route>
   <Route path="/about">
     <Content cmp={About} />
