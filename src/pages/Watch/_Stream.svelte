@@ -16,12 +16,12 @@
     CMD_QUERY,
     CMD_ZOOMIN,
     CMD_ZOOMOUT,
+    CMD_PAN,
   } from "../../config/cmd";
 
   export let id;
 
   let scale = "100";
-  let command = CMD_QUERY;
   let state = CMD_PLAY;
   let connkey = Math.floor(Math.random() * 999999 + 1).toString();
 
@@ -30,7 +30,7 @@
     return data;
   });
 
-  let request = async (cmd) => {
+  let request = async (opt) => {
     const { data } = await api({
       method: "GET",
       url: "index.php",
@@ -39,7 +39,7 @@
         view: "request",
         request: "stream",
         connkey,
-        command: cmd,
+        ...opt,
       },
     });
     return data;
@@ -48,8 +48,7 @@
   let stream = useQuery(
     "streamMonitor",
     async () => {
-      const data = await request(command);
-      command = CMD_QUERY;
+      const data = await request({ command: CMD_QUERY });
       return data;
     },
     {
@@ -58,28 +57,56 @@
   );
 
   async function streamPlay() {
-    command = state = CMD_PLAY;
+    state = CMD_PLAY;
+    const data = await request({ command: CMD_PLAY });
+    console.log(data);
+    return data;
   }
 
   async function streamPause() {
-    command = state = CMD_PAUSE;
+    state = CMD_PAUSE;
+    const data = await request({ command: CMD_PAUSE });
+    console.log(data);
+    return data;
   }
 
-  // TODO: zoom in and zoom out control;
+  async function streamZoomIn() {
+    const data = await request({ command: CMD_ZOOMIN });
+    console.log(data);
+    return data;
+  }
+
+  async function streamZoomOut() {
+    const data = await request({ command: CMD_ZOOMOUT });
+    console.log(data);
+    return data;
+  }
+
+  /**
+   * @param {MouseEvent} e
+   */
+  async function streamZoomInCoor(e) {
+    const x = e.pageX,
+      y = e.pageY;
+
+    if (e.ctrlKey) {
+      const data = await request({ command: CMD_PAN, x, y });
+      console.log(data);
+      return data;
+    }
+
+    const data = await request({ command: CMD_ZOOMIN, x, y });
+    console.log(data);
+    return data;
+  }
+
+  /**
+   * @param {MouseEvent} e
+   */
+  async function imgMouseMove(e) {
+    e.target.style.cursor = e.ctrlKey ? "grab" : "zoom-in";
+  }
 </script>
-
-<style>
-  .img-control {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    display: none;
-  }
-
-  .img-wrapper:hover .img-control {
-    display: block;
-  }
-</style>
 
 {#if !$query.isLoading}
   <Row>
@@ -98,19 +125,24 @@
         </div>
         <div class="img-wrapper position-relative mb-3">
           <img
+            on:click={streamZoomInCoor}
+            on:mousemove={imgMouseMove}
             alt="snapshot"
             class="rounded"
             draggable="false"
             height={$query.data.monitor.Monitor.Height * (+scale / 100)}
             width={$query.data.monitor.Monitor.Width * (+scale / 100)}
-            src="{zmUrl}/cgi-bin/nph-zms?scale=100&mode=jpeg&maxfps=30&width={$query.data.monitor.Monitor.Width}px&height={$query.data.monitor.Monitor.Height}px&monitor={id}&connkey={connkey}&token={$accessToken}" />
+            src="{zmUrl}/cgi-bin/nph-zms?scale=100&mode=jpeg&maxfps=30&width={$query
+              .data.monitor.Monitor.Width}px&height={$query.data.monitor.Monitor
+              .Height}px&monitor={id}&connkey={connkey}&token={$accessToken}"
+          />
           <div class="img-control">
             <ButtonGroup size="sm">
-              <IconContext values={{ color: '#000', size: 14 }}>
-                <Button title="Zoom Out" color="light">
+              <IconContext values={{ color: "#000", size: 14 }}>
+                <Button title="Zoom Out" color="light" on:click={streamZoomOut}>
                   <MagnifyingGlassMinus />
                 </Button>
-                <Button title="Zoom In" color="light">
+                <Button title="Zoom In" color="light" on:click={streamZoomIn}>
                   <MagnifyingGlassPlus />
                 </Button>
               </IconContext>
@@ -118,19 +150,21 @@
           </div>
         </div>
         <ButtonGroup>
-          <IconContext values={{ color: '#FFF', weight: 'fill', size: 14 }}>
+          <IconContext values={{ color: "#FFF", weight: "fill", size: 14 }}>
             <Button
               disabled={state === CMD_PLAY}
               title="Play"
               color="primary"
-              on:click={streamPlay}>
+              on:click={streamPlay}
+            >
               <Play />
             </Button>
             <Button
               disabled={state === CMD_PAUSE}
               title="Pause"
               color="primary"
-              on:click={streamPause}>
+              on:click={streamPause}
+            >
               <Pause />
             </Button>
           </IconContext>
@@ -138,7 +172,8 @@
       </div>
     </Col>
     <Col md="3">
-      {#if $stream.isSuccess && $stream.data.result === 'Ok'}
+      <!-- TODO: SHOW INFO STATUS -->
+      {#if $stream.isSuccess && $stream.data.result === "Ok"}
         {JSON.stringify($stream.data)}
       {/if}
     </Col>
@@ -148,3 +183,16 @@
     <Spinner />
   </div>
 {/if}
+
+<style>
+  .img-control {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    display: none;
+  }
+
+  .img-wrapper:hover .img-control {
+    display: block;
+  }
+</style>
