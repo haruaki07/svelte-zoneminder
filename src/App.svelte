@@ -2,12 +2,10 @@
   import { Route, router } from "tinro";
   import Navbar from "./components/Navbar.svelte";
   import Content from "./components/Content.svelte";
-  import About from "./pages/About.svelte";
+  import Settings from "./pages/Settings";
   import Watch from "./pages/Watch";
   import Console from "./pages/Console";
-  import { refreshToken, login, refreshTokenExp, accessToken } from "./stores";
-  import { onMount } from "svelte";
-  import axios from "axios";
+  import { refreshToken, login, refreshTokenExp, webTheme } from "./stores";
 
   if (!$refreshToken) {
     login.set(true);
@@ -15,7 +13,7 @@
 
   router.subscribe((_) => {
     if (!$refreshTokenExp || new Date($refreshTokenExp * 1000) <= Date.now()) {
-      console.log("need login!");
+      console.log("Unauthenticated");
       login.set(true);
     }
   });
@@ -23,7 +21,14 @@
 
 <svelte:head>
   <title>Zoneminder</title>
-  <link rel="stylesheet" href="/assets/bootstrap-light.min.css" />
+  <link
+    rel="stylesheet {$webTheme !== 'light' ? 'alternate' : ''}"
+    href="/assets/bootstrap-light.min.css"
+  />
+  <link
+    rel="stylesheet {$webTheme !== 'dark' ? 'alternate' : ''}"
+    href="/assets/bootstrap-dark.min.css"
+  />
 </svelte:head>
 
 <Route>
@@ -35,8 +40,8 @@
   <Route path="/watch/:id">
     <Watch />
   </Route>
-  <Route path="/about">
-    <Content cmp={About} />
+  <Route path="/settings">
+    <Settings />
   </Route>
   <Route fallback>404</Route>
 </Route>
