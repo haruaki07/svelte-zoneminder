@@ -32,6 +32,7 @@
 </script>
 
 <Button color="primary" class="mb-3" on:click={toggleModal}>Add Monitor</Button>
+<Button color="info" class="mb-3" on:click={$result.refetch()}>Reload</Button>
 
 <Table responsive hover dark={$webTheme === "dark"}>
   <thead>
@@ -46,7 +47,7 @@
     </tr>
   </thead>
   <tbody>
-    {#if !$result.isLoading}
+    {#if !$result.isLoading && $result.isSuccess}
       {#if $result.data.monitors.length}
         {#each $result.data.monitors as monitor}
           <MonitorListItem {monitor} />

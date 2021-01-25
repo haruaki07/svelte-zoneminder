@@ -5,14 +5,21 @@
   import Settings from "./pages/Settings";
   import Watch from "./pages/Watch";
   import Console from "./pages/Console";
-  import { refreshToken, login, refreshTokenExp, webTheme } from "./stores";
+  import { refreshToken, login, webTheme } from "./stores";
+  import Auth from "./libs/authStorage";
 
   if (!$refreshToken) {
     login.set(true);
   }
 
   router.subscribe((_) => {
-    if (!$refreshTokenExp || new Date($refreshTokenExp * 1000) <= Date.now()) {
+    const auth = Auth.getInstance();
+    const refreshTokenExp = auth.getRefreshTokenExp();
+    if (
+      !auth.getRefreshToken() ||
+      !refreshTokenExp ||
+      new Date(refreshTokenExp * 1000) <= Date.now()
+    ) {
       console.log("Unauthenticated");
       login.set(true);
     }

@@ -7,7 +7,6 @@
   import MagnifyingGlassPlus from "phosphor-svelte/lib/MagnifyingGlassPlus";
   import MagnifyingGlassMinus from "phosphor-svelte/lib/MagnifyingGlassMinus";
   import IconContext from "phosphor-svelte/lib/IconContext";
-  import pretty from "pretty-bytes";
   import { accessToken } from "../../stores";
   import { zmUrl } from "../../config/env";
   import {
@@ -18,11 +17,18 @@
     CMD_ZOOMOUT,
     CMD_PAN,
   } from "../../config/cmd";
+  import stateStrings from "../../config/state";
 
   export let id;
 
+  let mode = "";
+  let level = {
+    color: "",
+    value: "",
+  };
   let scale = "100";
-  let state = CMD_PLAY;
+  let streamState = CMD_PLAY;
+  let monitorState = "";
   let connkey = Math.floor(Math.random() * 999999 + 1).toString();
 
   let query = useQuery("getMonitor", async () => {
@@ -49,6 +55,29 @@
     "streamMonitor",
     async () => {
       const data = await request({ command: CMD_QUERY });
+
+      if (data.result === "Ok" && data.status) {
+        if (typeof data.status.state === "number")
+          monitorState = stateStrings[data.status.state];
+
+        if (data.status.paused) {
+          mode = "Paused";
+        } else if (data.status.delayed) {
+          mode = "Replay";
+        } else {
+          mode = "Live";
+        }
+
+        level.value = data.status.level;
+        if (data.status.level > 95) {
+          level.color = "text-danger";
+        } else if (data.status.level > 80) {
+          level.color = "text-warning";
+        } else {
+          level.color = "text-info";
+        }
+      }
+
       return data;
     },
     {
@@ -57,21 +86,26 @@
   );
 
   async function streamPlay() {
-    state = CMD_PLAY;
+    streamState = CMD_PLAY;
     const data = await request({ command: CMD_PLAY });
     console.log(data);
     return data;
   }
 
   async function streamPause() {
-    state = CMD_PAUSE;
+    streamState = CMD_PAUSE;
     const data = await request({ command: CMD_PAUSE });
     console.log(data);
     return data;
   }
 
-  async function streamZoomIn() {
-    const data = await request({ command: CMD_ZOOMIN });
+  async function streamZoomIn(x, y) {
+    let param = { command: CMD_ZOOMIN };
+    if (x && y) {
+      param.x = x;
+      param.y = y;
+    }
+    const data = await request(param);
     console.log(data);
     return data;
   }
@@ -82,22 +116,26 @@
     return data;
   }
 
+  async function streamPan(x, y) {
+    const data = await request({ command: CMD_PAN, x, y });
+    console.log(data);
+    return data;
+  }
+
   /**
    * @param {MouseEvent} e
    */
-  async function streamZoomInCoor(e) {
-    const x = e.pageX,
-      y = e.pageY;
+  async function imgMouseClick(e) {
+    /** @type {DOMRect} */
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left,
+      y = e.clientY - rect.top;
 
     if (e.ctrlKey) {
-      const data = await request({ command: CMD_PAN, x, y });
-      console.log(data);
-      return data;
+      return streamPan(x, y);
     }
 
-    const data = await request({ command: CMD_ZOOMIN, x, y });
-    console.log(data);
-    return data;
+    return streamZoomIn(x, y);
   }
 
   /**
@@ -125,7 +163,7 @@
         </div>
         <div class="img-wrapper position-relative mb-3">
           <img
-            on:click={streamZoomInCoor}
+            on:click={imgMouseClick}
             on:mousemove={imgMouseMove}
             alt="snapshot"
             class="rounded"
@@ -142,7 +180,11 @@
                 <Button title="Zoom Out" color="light" on:click={streamZoomOut}>
                   <MagnifyingGlassMinus />
                 </Button>
-                <Button title="Zoom In" color="light" on:click={streamZoomIn}>
+                <Button
+                  title="Zoom In"
+                  color="light"
+                  on:click={() => streamZoomIn()}
+                >
                   <MagnifyingGlassPlus />
                 </Button>
               </IconContext>
@@ -152,7 +194,7 @@
         <ButtonGroup>
           <IconContext values={{ color: "#FFF", weight: "fill", size: 14 }}>
             <Button
-              disabled={state === CMD_PLAY}
+              disabled={streamState === CMD_PLAY}
               title="Play"
               color="primary"
               on:click={streamPlay}
@@ -160,7 +202,7 @@
               <Play />
             </Button>
             <Button
-              disabled={state === CMD_PAUSE}
+              disabled={streamState === CMD_PAUSE}
               title="Pause"
               color="primary"
               on:click={streamPause}
@@ -172,9 +214,33 @@
       </div>
     </Col>
     <Col md="3">
-      <!-- TODO: SHOW INFO STATUS -->
-      {#if $stream.isSuccess && $stream.data.result === "Ok"}
-        {JSON.stringify($stream.data)}
+      {#if $stream.isSuccess && $stream.data.result === "Ok" && $stream.data.status}
+        <dl class="row">
+          <dt class="col-sm-3">State</dt>
+          <dd class="col-sm-9">
+            {monitorState} - {$stream.data.status.fps} fps
+          </dd>
+
+          <dt class="col-sm-3">Mode</dt>
+          <dd class="col-sm-9">{mode}</dd>
+
+          <dt class="col-sm-3">Zoom</dt>
+          <dd class="col-sm-9">{$stream.data.status.zoom}x</dd>
+
+          {#if mode !== "Live"}
+            {#if mode === "Replay"}
+              <dt class="col-sm-3">Rate</dt>
+              <dd class="col-sm-9">{$stream.data.status.rate}x</dd>
+            {/if}
+
+            <dt class="col-sm-3">Delay</dt>
+            <dd class="col-sm-9">{$stream.data.status.delay}s</dd>
+
+            <dt class="col-sm-3">Buffer</dt>
+            <dd class="col-sm-9 {level.color}">{level.value}%</dd>
+          {/if}
+        </dl>
+        <!-- {JSON.stringify($stream.data)} -->
       {/if}
     </Col>
   </Row>
