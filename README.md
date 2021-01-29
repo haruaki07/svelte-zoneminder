@@ -1,6 +1,8 @@
-# New Project
+# Svelte Zoneminder
 
 > ✨ Bootstrapped with Create Snowpack App (CSA).
+
+Based on zoneminder api.
 
 ## Available Scripts
 
