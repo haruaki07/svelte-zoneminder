@@ -1,4 +1,5 @@
 <script>
+  //#region import
   import { getContext } from "svelte";
   import { fly } from "svelte/transition";
   import pretty from "pretty-bytes";
@@ -9,12 +10,18 @@
     Modal,
     ModalBody,
     ModalHeader,
+    TabPane,
+    TabContent,
+    Nav,
+    NavItem,
+    NavLink,
   } from "sveltestrap";
   import MonitorListItem from "./_MonitorListItem.svelte";
   import { useQuery } from "@sveltestack/svelte-query";
   import api from "../../libs/api";
   import { sumBy } from "../../libs/utils";
   import { webTheme } from "../../stores";
+  //#endregion
 
   const result = useQuery(
     "monitors",
@@ -114,5 +121,18 @@
   transitionOptions={{ duration: 150, y: -100 }}
 >
   <ModalHeader toggle={toggleModal}>Add Monitor</ModalHeader>
-  <ModalBody>TODO : Can add monitor</ModalBody>
+  <ModalBody>
+    <Nav tabs>
+      <NavItem active>
+        <NavLink href="#general">General</NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink href="#source">Source</NavLink>
+      </NavItem>
+    </Nav>
+    <TabContent activeTab={document.location.hash.substr(1)}>
+      <TabPane tabId="general">asdsad</TabPane>
+      <TabPane tabId="source">source tab</TabPane>
+    </TabContent>
+  </ModalBody>
 </Modal>

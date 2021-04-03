@@ -6,6 +6,9 @@
 
   export let cmp;
 
+  let loading = false;
+  let error = false;
+
   const values = {
     user: "",
     pass: "",
@@ -14,7 +17,10 @@
   async function auth() {
     if (values.user && values.pass) {
       const data = new URLSearchParams(values);
+      loading = true;
       const res = await axios.post(`${zmUrl}/api/host/login.json`, data);
+      if (res.status !== 200) error = true;
+      loading = false;
       accessToken.set(res.data.access_token);
       refreshToken.set(res.data.refresh_token);
       refreshTokenExp.set(jwtDecode(res.data.refresh_token).exp);
@@ -25,6 +31,9 @@
 
 {#if $login}
   <div class="container">
+    {#if error}
+      <div class="text-danger text-sm mb-3">An error occured.</div>
+    {/if}
     <form on:submit|preventDefault={auth}>
       <div class="form-group">
         <label for="user">Username</label>
@@ -46,7 +55,9 @@
           bind:value={values.pass}
         />
       </div>
-      <button type="submit" class="btn btn-primary btn-block">Login</button>
+      <button type="submit" disabled={loading} class="btn btn-primary btn-block"
+        >Login</button
+      >
     </form>
   </div>
 {:else}

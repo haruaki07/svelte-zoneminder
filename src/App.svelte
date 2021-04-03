@@ -5,6 +5,7 @@
   import Settings from "./pages/Settings";
   import Watch from "./pages/Watch";
   import Console from "./pages/Console";
+  import { CreateMonitor } from "./pages/Create";
   import { refreshToken, login, webTheme } from "./stores";
   import Auth from "./libs/authStorage";
 
@@ -42,6 +43,9 @@
   <Navbar />
   <Route path="/">
     <Content cmp={Console} />
+  </Route>
+  <Route path="/monitors/create">
+    <CreateMonitor />
   </Route>
   <Route path="/watch" redirect="/" />
   <Route path="/watch/:id">
